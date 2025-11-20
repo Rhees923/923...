@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Student Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #6366f1, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-left: 3px solid #6366f1;
+        }
+        .sidebar-link.active {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-left: 3px solid #6366f1;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .notification-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .calendar-day {
+            transition: all 0.2s ease;
+        }
+        .calendar-day:hover {
+            background-color: #f3f4f6;
+        }
+        .calendar-day.today {
+            background-color: #e0e7ff;
+            color: #4338ca;
+            font-weight: 600;
+        }
+        .calendar-day.has-event {
+            position: relative;
+        }
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #6366f1;
+        }
+        .forum-post {
+            transition: all 0.2s ease;
+        }
+        .forum-post:hover {
+            background-color: #f9fafb;
+        }
+        .setting-section {
+            transition: all 0.2s ease;
+        }
+        .setting-section:hover {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg z-10">
+            <div class="h-full flex flex-col">
+                <!-- Logo -->
+                <div class="p-6 border-b">
+                    <a href="../index.html" class="text-2xl font-extrabold text-gradient">NEXUS</a>
+                </div>
+                
+                <!-- User Profile -->
+                <div class="p-4 border-b">
+                    <div class="flex items-center">
+                        <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/student123/100/100.jpg" alt="Profile">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900" id="user-name">Alex Johnson</p>
+                            <p class="text-xs text-gray-500" id="user-email">student@example.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                    <a href="#" data-tab="dashboard" class="sidebar-link active flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="#" data-tab="courses" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        My Courses
+                    </a>
+                    <a href="#" data-tab="assignments" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                        Assignments
+                    </a>
+                    <a href="#" data-tab="schedule" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Schedule
+                    </a>
+                    <a href="#" data-tab="progress" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        Progress
+                    </a>
+                    <a href="#" data-tab="community" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Community
+                    </a>
+                    <a href="#" data-tab="settings" class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md">
+                        <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Settings
+                    </a>
+                </nav>
+                
+                <!-- Sign Out -->
+                <div class="p-4 border-t">
+                    <a href="login.html" id="logout-link" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-red-50">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Sign Out
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-800" id="page-title">Student Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Search -->
+                        <div class="relative">
+                            <input type="text" placeholder="Search..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Notifications -->
+                        <button class="relative p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 notification-dot"></span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                        </button>
+                        
+                        <!-- User Menu -->
+                        <div class="relative">
+                            <button class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="user-menu-button">
+                                <img class="h-8 w-8 rounded-full" src="https://picsum.photos/seed/student123/100/100.jpg" alt="Profile">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <!-- Welcome Section -->
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Welcome back, <span id="welcome-name">Alex</span>!</h2>
+                        <p class="text-gray-600">Here's what's happening with your learning journey today.</p>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- Courses in Progress -->
+                        <div class="card bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-500">Courses</p>
+                                    <p class="text-2xl font-semibold text-gray-900">5</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Completed Lessons -->
+                        <div class="card bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-500">Completed</p>
+                                    <p class="text-2xl font-semibold text-gray-900">42</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Study Streak -->
+                        <div class="card bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-500">Streak</p>
+                                    <p class="text-2xl font-semibold text-gray-900">7 days</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Achievements -->
+                        <div class="card bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-500">Achievements</p>
+                                    <p class="text-2xl font-semibold text-gray-900">12</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Current Courses -->
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Current Courses</h3>
+                                <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Course 1 -->
+                                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                                    <span class="text-indigo-600 text-xl">💻</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="text-base font-medium text-gray-900">Web Development Fundamentals</h4>
+                                                <p class="text-sm text-gray-500">Next lesson: CSS Grid & Flexbox</p>
+                                                <div class="mt-2">
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <span class="text-xs text-gray-500">Progress</span>
+                                                        <span class="text-xs text-gray-500">65%</span>
+                                                    </div>
+                                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 65%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="ml-4 px-3 py-1 text-xs bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                                            Continue
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Course 2 -->
+                                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                    <span class="text-blue-600 text-xl">🎨</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="text-base font-medium text-gray-900">UI/UX Design Principles</h4>
+                                                <p class="text-sm text-gray-500">Next lesson: User Research Methods</p>
+                                                <div class="mt-2">
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <span class="text-xs text-gray-500">Progress</span>
+                                                        <span class="text-xs text-gray-500">40%</span>
+                                                    </div>
+                                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 40%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="ml-4 px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                            Continue
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Course 3 -->
+                                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                                    <span class="text-red-600 text-xl">🔒</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="text-base font-medium text-gray-900">Cybersecurity Basics</h4>
+                                                <p class="text-sm text-gray-500">Next lesson: Network Security Fundamentals</p>
+                                                <div class="mt-2">
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <span class="text-xs text-gray-500">Progress</span>
+                                                        <span class="text-xs text-gray-500">25%</span>
+                                                    </div>
+                                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                                        <div class="bg-red-600 h-2 rounded-full" style="width: 25%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="ml-4 px-3 py-1 text-xs bg-red-600 text-white rounded-md hover:bg-red-700">
+                                            Continue
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upcoming Events & Deadlines -->
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Upcoming Deadlines</h3>
+                            
+                            <div class="space-y-4">
+                                <!-- Deadline 1 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                            <span class="text-red-600 font-bold text-sm">2</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-gray-900">JavaScript Assignment</p>
+                                        <p class="text-xs text-gray-500">Due in 2 days</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Deadline 2 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                            <span class="text-yellow-600 font-bold text-sm">5</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-gray-900">Design Project Submission</p>
+                                        <p class="text-xs text-gray-500">Due in 5 days</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Deadline 3 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                            <span class="text-green-600 font-bold text-sm">7</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-gray-900">Security Quiz</p>
+                                        <p class="text-xs text-gray-500">Due in 7 days</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
+                                
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-1">
+                                            <span class="text-2xl">🏆</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600">Fast Learner</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-1">
+                                            <span class="text-2xl">💡</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600">Problem Solver</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1">
+                                            <span class="text-2xl">🌟</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600">Rising Star</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Path Progress -->
+                    <div class="mt-6 bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Learning Path Progress</h3>
+                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View Details</a>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <!-- Path 1 -->
+                            <div class="text-center">
+                                <div class="relative inline-flex items-center justify-center">
+                                    <svg class="w-24 h-24">
+                                        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                        <circle cx="50" cy="50" r="40" stroke="#6366f1" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="75.36" class="progress-ring"></circle>
+                                    </svg>
+                                    <span class="absolute text-xl font-semibold">70%</span>
+                                </div>
+                                <p class="mt-2 text-sm font-medium text-gray-900">Web Development</p>
+                            </div>
+                            
+                            <!-- Path 2 -->
+                            <div class="text-center">
+                                <div class="relative inline-flex items-center justify-center">
+                                    <svg class="w-24 h-24">
+                                        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                        <circle cx="50" cy="50" r="40" stroke="#3b82f6" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="125.6" class="progress-ring"></circle>
+                                    </svg>
+                                    <span class="absolute text-xl font-semibold">50%</span>
+                                </div>
+                                <p class="mt-2 text-sm font-medium text-gray-900">UI/UX Design</p>
+                            </div>
+                            
+                            <!-- Path 3 -->
+                            <div class="text-center">
+                                <div class="relative inline-flex items-center justify-center">
+                                    <svg class="w-24 h-24">
+                                        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                        <circle cx="50" cy="50" r="40" stroke="#ef4444" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="188.4" class="progress-ring"></circle>
+                                    </svg>
+                                    <span class="absolute text-xl font-semibold">25%</span>
+                                </div>
+                                <p class="mt-2 text-sm font-medium text-gray-900">Cybersecurity</p>
+                            </div>
+                            
+                            <!-- Path 4 -->
+                            <div class="text-center">
+                                <div class="relative inline-flex items-center justify-center">
+                                    <svg class="w-24 h-24">
+                                        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                        <circle cx="50" cy="50" r="40" stroke="#10b981" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="225" class="progress-ring"></circle>
+                                    </svg>
+                                    <span class="absolute text-xl font-semibold">10%</span>
+                                </div>
+                                <p class="mt-2 text-sm font-medium text-gray-900">AI & Machine Learning</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Courses Tab -->
+                <div id="courses" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">My Courses</h2>
+                        <p class="text-gray-600">Browse and manage all your enrolled courses</p>
+                    </div>
+                    
+                    <!-- Course Filters -->
+                    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">All Courses</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">In Progress</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">Completed</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">Bookmarked</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Course Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Course 1 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-indigo-100 flex items-center justify-center">
+                                <span class="text-5xl">💻</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">Web Development Fundamentals</h3>
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-600 text-xs rounded-full">In Progress</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Master HTML, CSS, and JavaScript to build modern websites</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">65%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>24 hours</span>
+                                    </div>
+                                    <button class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 2 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-blue-100 flex items-center justify-center">
+                                <span class="text-5xl">🎨</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">UI/UX Design Principles</h3>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">In Progress</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Learn design thinking, user research, and interface design</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">40%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>18 hours</span>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 3 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-red-100 flex items-center justify-center">
+                                <span class="text-5xl">🔒</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">Cybersecurity Basics</h3>
+                                    <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">In Progress</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Essential security concepts and best practices</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">25%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-red-600 h-2 rounded-full" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>32 hours</span>
+                                    </div>
+                                    <button class="text-red-600 hover:text-red-800 font-medium text-sm">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 4 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-green-100 flex items-center justify-center">
+                                <span class="text-5xl">🧠</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">AI & Machine Learning</h3>
+                                    <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Not Started</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Introduction to artificial intelligence and ML algorithms</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>40 hours</span>
+                                    </div>
+                                    <button class="text-green-600 hover:text-green-800 font-medium text-sm">Start</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 5 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-purple-100 flex items-center justify-center">
+                                <span class="text-5xl">📊</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">Data Analytics</h3>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">Completed</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Data visualization, analysis, and interpretation</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">100%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gray-600 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>28 hours</span>
+                                    </div>
+                                    <button class="text-gray-600 hover:text-gray-800 font-medium text-sm">Review</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 6 -->
+                        <div class="card bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="h-40 bg-yellow-100 flex items-center justify-center">
+                                <span class="text-5xl">📱</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">Mobile App Development</h3>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Bookmarked</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Build native mobile apps for iOS and Android</p>
+                                <div class="mb-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Progress</span>
+                                        <span class="text-xs text-gray-500">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>36 hours</span>
+                                    </div>
+                                    <button class="text-yellow-600 hover:text-yellow-800 font-medium text-sm">Start</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Assignments Tab -->
+                <div id="assignments" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Assignments</h2>
+                        <p class="text-gray-600">Track and submit your coursework</p>
+                    </div>
+                    
+                    <!-- Assignment Filters -->
+                    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">All Assignments</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">Pending</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">Submitted</button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">Graded</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Assignment List -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignment</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- Assignment 1 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">JavaScript Fundamentals Quiz</div>
+                                            <div class="text-sm text-gray-500">Multiple choice questions</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Web Development Fundamentals</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Oct 15, 2023</div>
+                                            <div class="text-sm text-red-600">In 2 days</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            Not graded
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900">Start</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Assignment 2 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">CSS Layout Project</div>
+                                            <div class="text-sm text-gray-500">Create a responsive webpage</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Web Development Fundamentals</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Oct 18, 2023</div>
+                                            <div class="text-sm text-yellow-600">In 5 days</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            Not graded
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900">Continue</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Assignment 3 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">User Research Report</div>
+                                            <div class="text-sm text-gray-500">Conduct user interviews and analyze findings</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">UI/UX Design Principles</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Oct 20, 2023</div>
+                                            <div class="text-sm text-green-600">In 7 days</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            Not graded
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900">Start</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Assignment 4 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">HTML Structure Exercise</div>
+                                            <div class="text-sm text-gray-500">Build semantic HTML markup</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Web Development Fundamentals</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Oct 5, 2023</div>
+                                            <div class="text-sm text-gray-500">5 days ago</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Submitted</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            Pending review
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900">View</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Assignment 5 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">Network Security Basics</div>
+                                            <div class="text-sm text-gray-500">Identify common security vulnerabilities</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Cybersecurity Basics</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">Sep 28, 2023</div>
+                                            <div class="text-sm text-gray-500">2 weeks ago</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Graded</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">85/100</div>
+                                            <div class="text-sm text-gray-500">B+</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Schedule Tab -->
+                <div id="schedule" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Schedule</h2>
+                        <p class="text-gray-600">View your upcoming classes and events</p>
+                    </div>
+                    
+                    <!-- Calendar View -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">October 2023</h3>
+                            <div class="flex space-x-2">
+                                <button class="p-2 rounded-lg hover:bg-gray-100">
+                                    <svg class="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                <button class="p-2 rounded-lg hover:bg-gray-100">
+                                    <svg class="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Calendar Grid -->
+                        <div class="grid grid-cols-7 gap-2 mb-2">
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Sun</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Mon</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Tue</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Wed</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Thu</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Fri</div>
+                            <div class="text-center text-xs font-medium text-gray-500 py-2">Sat</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-7 gap-2">
+                            <!-- Previous month days -->
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">25</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">26</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">27</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">28</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">29</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">30</div>
+                            
+                            <!-- Current month days -->
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">1</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">2</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">3</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">4</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">5</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">6</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">7</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">8</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">9</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">10</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">11</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">12</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">13</div>
+                            <div class="calendar-day has-event text-center py-2 rounded cursor-pointer">14</div>
+                            <div class="calendar-day has-event text-center py-2 rounded cursor-pointer">15</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">16</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">17</div>
+                            <div class="calendar-day has-event text-center py-2 rounded cursor-pointer">18</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">19</div>
+                            <div class="calendar-day has-event text-center py-2 rounded cursor-pointer">20</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">21</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">22</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">23</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">24</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">25</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">26</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">27</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">28</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">29</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">30</div>
+                            <div class="calendar-day text-center py-2 rounded cursor-pointer">31</div>
+                            
+                            <!-- Next month days -->
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">1</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">2</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">3</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">4</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">5</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">6</div>
+                            <div class="calendar-day text-center py-2 text-gray-400 rounded">7</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Upcoming Events -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Upcoming Events</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Event 1 -->
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-xs font-semibold text-indigo-600">OCT</span>
+                                        <span class="text-lg font-bold text-indigo-600">14</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-base font-medium text-gray-900">JavaScript Live Session</h4>
+                                    <p class="text-sm text-gray-600 mb-1">Web Development Fundamentals</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>2:00 PM - 3:30 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Event 2 -->
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-xs font-semibold text-blue-600">OCT</span>
+                                        <span class="text-lg font-bold text-blue-600">15</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-base font-medium text-gray-900">UI/UX Design Workshop</h4>
+                                    <p class="text-sm text-gray-600 mb-1">Guest Speaker: Sarah Johnson</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>4:00 PM - 5:30 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Event 3 -->
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 bg-red-100 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-xs font-semibold text-red-600">OCT</span>
+                                        <span class="text-lg font-bold text-red-600">18</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-base font-medium text-gray-900">Cybersecurity Lab</h4>
+                                    <p class="text-sm text-gray-600 mb-1">Hands-on security exercises</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>10:00 AM - 12:00 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Event 4 -->
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-4">
+                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-xs font-semibold text-green-600">OCT</span>
+                                        <span class="text-lg font-bold text-green-600">20</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-base font-medium text-gray-900">Design Project Review</h4>
+                                    <p class="text-sm text-gray-600 mb-1">UI/UX Design Principles</p>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>3:00 PM - 4:00 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Tab -->
+                <div id="progress" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Progress</h2>
+                        <p class="text-gray-600">Track your learning journey and achievements</p>
+                    </div>
+                    
+                    <!-- Overall Progress -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Overall Progress</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Overall Completion</span>
+                                    <span class="text-sm font-medium text-gray-700">48%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                                    <div class="bg-indigo-600 h-3 rounded-full" style="width: 48%"></div>
+                                </div>
+                                
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Courses Completed</span>
+                                    <span class="text-sm font-medium text-gray-700">2 of 5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                                    <div class="bg-green-600 h-3 rounded-full" style="width: 40%"></div>
+                                </div>
+                                
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Assignments Completed</span>
+                                    <span class="text-sm font-medium text-gray-700">8 of 12</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-blue-600 h-3 rounded-full" style="width: 67%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-base font-medium text-gray-900 mb-3">Learning Stats</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Total Study Time</span>
+                                        <span class="text-sm font-medium text-gray-900">142 hours</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Current Streak</span>
+                                        <span class="text-sm font-medium text-gray-900">7 days</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Longest Streak</span>
+                                        <span class="text-sm font-medium text-gray-900">21 days</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Average Score</span>
+                                        <span class="text-sm font-medium text-gray-900">87%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Certificates Earned</span>
+                                        <span class="text-sm font-medium text-gray-900">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Course Progress -->
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Course Progress</h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Course 1 -->
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <h4 class="text-base font-medium text-gray-900">Web Development Fundamentals</h4>
+                                    <span class="text-sm font-medium text-gray-700">65%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 65%"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-500">Lessons:</span>
+                                        <span class="font-medium text-gray-900">13 of 20</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Assignments:</span>
+                                        <span class="font-medium text-gray-900">3 of 5</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Quizzes:</span>
+                                        <span class="font-medium text-gray-900">4 of 6</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Course 2 -->
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <h4 class="text-base font-medium text-gray-900">UI/UX Design Principles</h4>
+                                    <span class="text-sm font-medium text-gray-700">40%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 40%"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-500">Lessons:</span>
+                                        <span class="font-medium text-gray-900">8 of 20</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Assignments:</span>
+                                        <span class="font-medium text-gray-900">2 of 6</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Quizzes:</span>
+                                        <span class="font-medium text-gray-900">1 of 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Course 3 -->
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <h4 class="text-base font-medium text-gray-900">Cybersecurity Basics</h4>
+                                    <span class="text-sm font-medium text-gray-700">25%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                    <div class="bg-red-600 h-2 rounded-full" style="width: 25%"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-500">Lessons:</span>
+                                        <span class="font-medium text-gray-900">5 of 20</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Assignments:</span>
+                                        <span class="font-medium text-gray-900">1 of 5</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">Quizzes:</span>
+                                        <span class="font-medium text-gray-900">1 of 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Achievements -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Achievements</h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <!-- Achievement 1 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🏆</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">Fast Learner</h4>
+                                <p class="text-xs text-gray-500">Complete 5 lessons in one day</p>
+                            </div>
+                            
+                            <!-- Achievement 2 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">💡</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">Problem Solver</h4>
+                                <p class="text-xs text-gray-500">Solve 10 coding challenges</p>
+                            </div>
+                            
+                            <!-- Achievement 3 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🌟</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">Rising Star</h4>
+                                <p class="text-xs text-gray-500">Maintain a 7-day streak</p>
+                            </div>
+                            
+                            <!-- Achievement 4 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🎯</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">Perfectionist</h4>
+                                <p class="text-xs text-gray-500">Score 100% on 3 quizzes</p>
+                            </div>
+                            
+                            <!-- Achievement 5 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🔥</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">On Fire</h4>
+                                <p class="text-xs text-gray-500">Maintain a 14-day streak</p>
+                            </div>
+                            
+                            <!-- Achievement 6 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🚀</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-900">Quick Starter</h4>
+                                <p class="text-xs text-gray-500">Complete first lesson in under 5 minutes</p>
+                            </div>
+                            
+                            <!-- Achievement 7 -->
+                            <div class="text-center opacity-50">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🔒</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-500">Dedicated Student</h4>
+                                <p class="text-xs text-gray-400">Study for 100 hours total</p>
+                            </div>
+                            
+                            <!-- Achievement 8 -->
+                            <div class="text-center opacity-50">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span class="text-3xl">🎓</span>
+                                </div>
+                                <h4 class="text-sm font-medium text-gray-500">Course Master</h4>
+                                <p class="text-xs text-gray-400">Complete your first course</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Tab -->
+                <div id="community" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Community</h2>
+                        <p class="text-gray-600">Connect with fellow learners and share your knowledge</p>
+                    </div>
+                    
+                    <!-- Community Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                            <div class="text-3xl font-bold text-indigo-600 mb-2">2,847</div>
+                            <p class="text-sm text-gray-600">Active Students</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                            <div class="text-3xl font-bold text-green-600 mb-2">523</div>
+                            <p class="text-sm text-gray-600">Forum Posts Today</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                            <div class="text-3xl font-bold text-purple-600 mb-2">42</div>
+                            <p class="text-sm text-gray-600">Study Groups</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Forum Posts -->
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Recent Forum Posts</h3>
+                                <button class="text-sm text-indigo-600 hover:text-indigo-800">View All</button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Post 1 -->
+                                <div class="forum-post border-b pb-4">
+                                    <div class="flex items-start">
+                                        <img class="h-10 w-10 rounded-full mr-3" src="https://picsum.photos/seed/user1/100/100.jpg" alt="User">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-base font-medium text-gray-900">Best practices for responsive design?</h4>
+                                                <span class="text-xs text-gray-500">2 hours ago</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">I'm working on a project and struggling with making it look good on mobile devices. Any tips?</p>
+                                            <div class="flex items-center mt-2 text-sm text-gray-500">
+                                                <span class="font-medium text-gray-700">Sarah Chen</span>
+                                                <span class="mx-2">•</span>
+                                                <span>Web Development Fundamentals</span>
+                                                <span class="mx-2">•</span>
+                                                <span>12 replies</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post 2 -->
+                                <div class="forum-post border-b pb-4">
+                                    <div class="flex items-start">
+                                        <img class="h-10 w-10 rounded-full mr-3" src="https://picsum.photos/seed/user2/100/100.jpg" alt="User">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-base font-medium text-gray-900">Resources for learning UX research?</h4>
+                                                <span class="text-xs text-gray-500">5 hours ago</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">Can anyone recommend good books or articles on user research methods?</p>
+                                            <div class="flex items-center mt-2 text-sm text-gray-500">
+                                                <span class="font-medium text-gray-700">Mike Johnson</span>
+                                                <span class="mx-2">•</span>
+                                                <span>UI/UX Design Principles</span>
+                                                <span class="mx-2">•</span>
+                                                <span>8 replies</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post 3 -->
+                                <div class="forum-post border-b pb-4">
+                                    <div class="flex items-start">
+                                        <img class="h-10 w-10 rounded-full mr-3" src="https://picsum.photos/seed/user3/100/100.jpg" alt="User">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-base font-medium text-gray-900">Tips for memorizing security protocols?</h4>
+                                                <span class="text-xs text-gray-500">1 day ago</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">I'm having trouble remembering all the different security protocols. Any mnemonics or techniques?</p>
+                                            <div class="flex items-center mt-2 text-sm text-gray-500">
+                                                <span class="font-medium text-gray-700">Alex Rivera</span>
+                                                <span class="mx-2">•</span>
+                                                <span>Cybersecurity Basics</span>
+                                                <span class="mx-2">•</span>
+                                                <span>15 replies</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Post 4 -->
+                                <div class="forum-post pb-4">
+                                    <div class="flex items-start">
+                                        <img class="h-10 w-10 rounded-full mr-3" src="https://picsum.photos/seed/user4/100/100.jpg" alt="User">
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-base font-medium text-gray-900">Study group for AI course?</h4>
+                                                <span class="text-xs text-gray-500">2 days ago</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">Is anyone interested in forming a study group for the AI & Machine Learning course?</p>
+                                            <div class="flex items-center mt-2 text-sm text-gray-500">
+                                                <span class="font-medium text-gray-700">Jordan Lee</span>
+                                                <span class="mx-2">•</span>
+                                                <span>AI & Machine Learning</span>
+                                                <span class="mx-2">•</span>
+                                                <span>23 replies</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Study Groups -->
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Study Groups</h3>
+                                <button class="text-sm text-indigo-600 hover:text-indigo-800">Create New</button>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Group 1 -->
+                                <div class="border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-base font-medium text-gray-900">JavaScript Study Group</h4>
+                                        <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Active</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Weekly meetings to practice JavaScript concepts</p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                        <span>15 members</span>
+                                        <span>Next: Tomorrow, 3 PM</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Group 2 -->
+                                <div class="border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-base font-medium text-gray-900">UI/UX Design Review</h4>
+                                        <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Active</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Share and get feedback on design projects</p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                        <span>8 members</span>
+                                        <span>Next: Friday, 4 PM</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Group 3 -->
+                                <div class="border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-base font-medium text-gray-900">Cybersecurity Challenge</h4>
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Forming</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Solve security challenges together</p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                        <span>3 members</span>
+                                        <span>Next: TBD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div id="settings" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
+                        <p class="text-gray-600">Manage your account and preferences</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Profile Settings -->
+                        <div class="lg:col-span-2 space-y-6">
+                            <!-- Profile Information -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                            <input type="text" id="first-name" value="Alex" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                            <input type="text" id="last-name" value="Johnson" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <input type="email" id="email" value="student@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                                        <textarea id="bio" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">Passionate learner interested in web development and cybersecurity.</textarea>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification Settings -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Notification Settings</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Email Notifications</p>
+                                            <p class="text-xs text-gray-500">Receive email updates about your courses</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600">
+                                            <span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Assignment Reminders</p>
+                                            <p class="text-xs text-gray-500">Get notified about upcoming deadlines</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600">
+                                            <span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Course Updates</p>
+                                            <p class="text-xs text-gray-500">Notifications when new content is added</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200">
+                                            <span class="translate-x-1 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Community Updates</p>
+                                            <p class="text-xs text-gray-500">Updates on forum posts you follow</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600">
+                                            <span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Privacy Settings -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Privacy Settings</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Profile Visibility</p>
+                                            <p class="text-xs text-gray-500">Make your profile visible to other students</p>
+                                        </div>
+                                        <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option>Everyone</option>
+                                            <option>Students Only</option>
+                                            <option>Private</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Show Progress</p>
+                                            <p class="text-xs text-gray-500">Display your course progress on your profile</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600">
+                                            <span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Show Achievements</p>
+                                            <p class="text-xs text-gray-500">Display your achievements on your profile</p>
+                                        </div>
+                                        <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600">
+                                            <span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Account Actions -->
+                        <div class="space-y-6">
+                            <!-- Change Password -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                        <input type="password" id="current-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                        <input type="password" id="new-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                        <input type="password" id="confirm-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Update Password</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Danger Zone -->
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Danger Zone</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="border border-red-300 rounded-lg p-4">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">Delete Account</p>
+                                                <p class="text-xs text-gray-500">Permanently delete your account and all data</p>
+                                            </div>
+                                            <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userEmail = localStorage.getItem('userEmail');
+            
+            // If not logged in, redirect to login page
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update user information in dashboard
+            if (userEmail) {
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('welcome-name').textContent = userEmail.split('@')[0];
+                document.getElementById('user-name').textContent = userEmail.split('@')[0];
+            }
+            
+            // Handle logout
+            document.getElementById('logout-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                window.location.href = 'login.html';
+            });
+            
+            // Handle tab navigation
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const pageTitle = document.getElementById('page-title');
+            
+            // Tab titles mapping
+            const tabTitles = {
+                'dashboard': 'Student Dashboard',
+                'courses': 'My Courses',
+                'assignments': 'Assignments',
+                'schedule': 'Schedule',
+                'progress': 'Progress',
+                'community': 'Community',
+                'settings': 'Settings'
+            };
+            
+            // Add click event to sidebar links
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Get the tab name from data attribute
+                    const tabName = link.getAttribute('data-tab');
+                    
+                    // Remove active class from all links and tabs
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+                    
+                    // Add active class to clicked link and corresponding tab
+                    link.classList.add('active');
+                    document.getElementById(tabName).classList.add('active');
+                    
+                    // Update page title
+                    pageTitle.textContent = tabTitles[tabName];
+                });
+            });
+            
+            // Simulate notification badge
+            const notificationDot = document.querySelector('.notification-dot');
+            if (notificationDot) {
+                setTimeout(() => {
+                    notificationDot.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

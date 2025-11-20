@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Digital Mastery Academy</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #6366f1, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="text-2xl font-extrabold text-gradient">NEXUS</a>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="#tracks" class="text-indigo-600 border-b-2 border-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Learning Tracks</a>
+                    <a href="pages/about.html" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">About Us</a>
+                    <a href="pages/contact.html" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Contact</a>
+                    <a href="portal/login.html" class="text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-medium transition duration-150 shadow-md">Student Portal</a>
+                </div>
+                <!-- Mobile Menu Button (Hamburger) -->
+                <div class="flex items-center sm:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="sm:hidden hidden absolute w-full bg-white shadow-lg border-t border-gray-200">
+            <div class="pt-2 pb-3 space-y-1 px-2">
+                <a href="#tracks" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-700 bg-indigo-50">Learning Tracks</a>
+                <a href="pages/about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">About Us</a>
+                <a href="pages/contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">Contact</a>
+                <a href="portal/login.html" class="block w-full text-center mt-2 px-3 py-2 border border-transparent rounded-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Student Portal</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900">
+                Master the <span class="text-gradient">Digital Domain</span>
+            </h1>
+            <p class="mt-6 text-xl text-gray-500 max-w-3xl mx-auto">
+                Nexus is the future of digital education, offering expert-led mastery tracks in the most in-demand technological fields.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#tracks" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 transform hover:scale-105">
+                    Explore All Tracks
+                </a>
+                <a href="pages/about.html" class="inline-flex items-center justify-center px-8 py-3 border border-indigo-600 text-base font-medium rounded-lg text-indigo-600 bg-white hover:bg-indigo-50 transition duration-150">
+                    Learn Our Story
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Learning Tracks Section -->
+    <section id="tracks" class="py-20 lg:py-28 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-gray-900">Choose Your Mastery Path</h2>
+                <p class="mt-4 text-xl text-gray-500">Four intensive tracks designed for career acceleration in the digital world.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                <!-- Track 1: Digital Creation -->
+                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-indigo-500">
+                    <div class="text-5xl mb-4 text-indigo-500">🎨</div>
+                    <h3 class="text-xl font-bold text-gray-900">Digital Creation</h3>
+                    <p class="mt-2 text-gray-500 text-sm">Design, photography, video editing, and Adobe suite mastery.</p>
+                    <a href="courses/design/index.html" class="mt-4 inline-block text-indigo-600 font-semibold hover:text-indigo-800 transition duration-150">View Courses &rarr;</a>
+                </div>
+
+                <!-- Track 2: Development & Code -->
+                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-blue-500">
+                    <div class="text-5xl mb-4 text-blue-500">💻</div>
+                    <h3 class="text-xl font-bold text-gray-900">Development & Code</h3>
+                    <p class="mt-2 text-gray-500 text-sm">Full-stack web development, Python programming, and data structures.</p>
+                    <a href="courses/coding/index.html" class="mt-4 inline-block text-blue-600 font-semibold hover:text-blue-800 transition duration-150">View Courses &rarr;</a>
+                </div>
+
+                <!-- Track 3: Cyber Security & IT -->
+                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-red-500">
+                    <div class="text-5xl mb-4 text-red-500">🔒</div>
+                    <h3 class="text-xl font-bold text-gray-900">Cyber Security & IT</h3>
+                    <p class="mt-2 text-gray-500 text-sm">Ethical hacking, network defense, and system administration.</p>
+                    <a href="courses/security/index.html" class="mt-4 inline-block text-red-600 font-semibold hover:text-red-800 transition duration-150">View Courses &rarr;</a>
+                </div>
+
+                <!-- Track 4: Future Tech & AI -->
+                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-teal-500">
+                    <div class="text-5xl mb-4 text-teal-500">🧠</div>
+                    <h3 class="text-xl font-bold text-gray-900">Future Tech & AI</h3>
+                    <p class="mt-2 text-gray-500 text-sm">Machine learning, prompt engineering, and generative model creation.</p>
+                    <a href="courses/ai/index.html" class="mt-4 inline-block text-teal-600 font-semibold hover:text-teal-800 transition duration-150">View Courses &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="bg-indigo-600 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-extrabold text-white">Ready to Start Your Journey?</h2>
+            <p class="mt-4 text-xl text-indigo-200">Join thousands of successful students building their digital careers.</p>
+            <a href="portal/login.html" class="mt-8 inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-lg shadow-2xl text-indigo-600 bg-white hover:bg-gray-100 transition duration-150 transform hover:scale-105">
+                Sign Up for Free
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-gray-400 text-sm">
+                <a href="index.html" class="hover:text-white mx-2">Home</a>
+                <span class="mx-2">|</span>
+                <a href="pages/about.html" class="hover:text-white mx-2">About</a>
+                <span class="mx-2">|</span>
+                <a href="pages/contact.html" class="hover:text-white mx-2">Contact</a>
+                <span class="mx-2">|</span>
+                <a href="portal/login.html" class="hover:text-white mx-2">Student Portal</a>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-700 text-center text-gray-500 text-sm">
+                &copy; 2025 Nexus Digital Mastery Academy. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
