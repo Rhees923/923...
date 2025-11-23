@@ -6,11 +6,25 @@
     <title>Nexus - Digital Mastery Academy</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Allura&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fb;
+            background-color: #000000;
+            overflow-x: hidden;
         }
+        
+        /* Custom font for Nexus */
+        .nexus-font {
+            font-family: "Pacifico", "Dancing Script", "Great Vibes", "Allura", "Brush Script MT", cursive, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        /* Text gradient */
         .text-gradient {
             background-image: linear-gradient(to right, #6366f1, #3b82f6);
             -webkit-background-clip: text;
@@ -18,143 +32,894 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+        
+        /* Water-like gradient */
+        .water-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Fluid animation for background */
+        .fluid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .fluid-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(30px, 50px) scale(1.05); }
+        }
+        
+        /* Fade in animation for sections */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered animation for cards */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .stagger-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Pulse animation for buttons */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        
+        /* Wave animation */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23ffffff" opacity=".25"></path><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" fill="%23ffffff" opacity=".5"></path><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%23ffffff"></path></svg>') repeat-x;
+            animation: wave 10s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+        
+        /* Hover animations */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Text reveal animation */
+        .text-reveal {
+            overflow: hidden;
+        }
+        
+        .text-reveal span {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: textReveal 0.8s forwards;
+        }
+        
+        @keyframes textReveal {
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Morphing shape */
+        .morph-shape {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #6366f1, #3b82f6);
+            border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 8s ease-in-out infinite;
+        }
+        
+        @keyframes morph {
+            0% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 30% 50% 60%; }
+            100% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+        }
+        
+        /* Loading animation */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #6366f1, #3b82f6);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #5558dd, #2d6fd8);
+        }
+        
+        /* Dropdown menu styles */
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f5f9;
+        }
     </style>
 </head>
 <body class="text-gray-800">
+    <!-- Fluid Background Animation -->
+    <div class="fluid-bg">
+        <div class="fluid-shape water-gradient" style="width: 600px; height: 600px; top: -200px; right: -200px; animation-delay: 0s;"></div>
+        <div class="fluid-shape water-gradient" style="width: 400px; height: 400px; bottom: -150px; left: -150px; animation-delay: 5s;"></div>
+        <div class="fluid-shape water-gradient" style="width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s;"></div>
+    </div>
 
-    <!-- Navigation Bar -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="index.html" class="text-2xl font-extrabold text-gradient">NEXUS</a>
-                </div>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                    <a href="#tracks" class="text-indigo-600 border-b-2 border-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Learning Tracks</a>
-                    <a href="pages/about.html" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">About Us</a>
-                    <a href="pages/contact.html" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Contact</a>
-                    <a href="portal/login.html" class="text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-medium transition duration-150 shadow-md">Student Portal</a>
-                </div>
-                <!-- Mobile Menu Button (Hamburger) -->
-                <div class="flex items-center sm:hidden">
-                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+    <!-- Intro Animation Container -->
+    <div class="intro-container" id="intro-container">
+        <div class="nexus-container">
+            <!-- SVG for animated "Nexus" text -->
+            <svg class="nexus-svg" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Path for letter N -->
+                <path id="n-path" d="M100,50 L100,150 L200,50 L200,150" 
+                      stroke="white" stroke-width="3" fill="none" 
+                      stroke-dasharray="500" stroke-dashoffset="500"/>
+                
+                <!-- Path for letter E -->
+                <path id="e-path" d="M250,50 L250,150 M250,50 L350,50 M250,100 L320,100 M250,150 L350,150" 
+                      stroke="white" stroke-width="3" fill="none" 
+                      stroke-dasharray="600" stroke-dashoffset="600"/>
+                
+                <!-- Path for letter X -->
+                <path id="x-path" d="M400,50 L500,150 M500,50 L400,150" 
+                      stroke="white" stroke-width="3" fill="none" 
+                      stroke-dasharray="400" stroke-dashoffset="400"/>
+                
+                <!-- Path for letter U -->
+                <path id="u-path" d="M550,50 L550,120 Q550,150 580,150 Q610,150 610,120 L610,50" 
+                      stroke="white" stroke-width="3" fill="none" 
+                      stroke-dasharray="500" stroke-dashoffset="500"/>
+                
+                <!-- Path for letter S -->
+                <path id="s-path" d="M680,60 Q680,50 690,50 Q720,50 720,80 Q720,110 690,110 Q660,110 660,140 Q660,150 670,150 Q700,150 700,120" 
+                      stroke="white" stroke-width="3" fill="none" 
+                      stroke-dasharray="600" stroke-dashoffset="600"/>
+            </svg>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="sm:hidden hidden absolute w-full bg-white shadow-lg border-t border-gray-200">
-            <div class="pt-2 pb-3 space-y-1 px-2">
-                <a href="#tracks" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-700 bg-indigo-50">Learning Tracks</a>
-                <a href="pages/about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">About Us</a>
-                <a href="pages/contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">Contact</a>
-                <a href="portal/login.html" class="block w-full text-center mt-2 px-3 py-2 border border-transparent rounded-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Student Portal</a>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-content" id="main-content">
+        <!-- Navigation Bar -->
+        <nav class="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50 transition-all duration-300" id="navbar">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="text-2xl font-extrabold text-gradient nexus-font">NEXUS</a>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#home" class="nav-link text-indigo-600 border-b-2 border-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Home</a>
+                        <a href="#about" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">About</a>
+                        
+                        <!-- Courses Dropdown -->
+                        <div class="dropdown">
+                            <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150 flex items-center">
+                                Courses <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-content">
+                                <a href="courses/ai/index.html" class="flex items-center">
+                                    <i class="fas fa-brain mr-2 text-indigo-500"></i> AI & Machine Learning
+                                </a>
+                                <a href="courses/coding/index.html" class="flex items-center">
+                                    <i class="fas fa-code mr-2 text-blue-500"></i> Coding & Development
+                                </a>
+                                <a href="courses/design/index.html" class="flex items-center">
+                                    <i class="fas fa-palette mr-2 text-purple-500"></i> Design & Creative
+                                </a>
+                                <a href="courses/security/index.html" class="flex items-center">
+                                    <i class="fas fa-shield-alt mr-2 text-red-500"></i> Cyber Security
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Pages Dropdown -->
+                        <div class="dropdown">
+                            <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150 flex items-center">
+                                Pages <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-content">
+                                <a href="pages/about.html" class="flex items-center">
+                                    <i class="fas fa-info-circle mr-2 text-gray-500"></i> About Us
+                                </a>
+                                <a href="pages/contact.html" class="flex items-center">
+                                    <i class="fas fa-envelope mr-2 text-gray-500"></i> Contact
+                                </a>
+                                <a href="pages/flow.html" class="flex items-center">
+                                    <i class="fas fa-water mr-2 text-indigo-500"></i> Nexus Flow
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Portal Dropdown -->
+                        <div class="dropdown">
+                            <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150 flex items-center">
+                                Portal <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </a>
+                            <div class="dropdown-content">
+                                <a href="portal/login.html" class="flex items-center">
+                                    <i class="fas fa-sign-in-alt mr-2 text-green-500"></i> Student Login
+                                </a>
+                                <a href="portal/dashboard.html" class="flex items-center">
+                                    <i class="fas fa-tachometer-alt mr-2 text-orange-500"></i> Dashboard
+                                </a>
+                                <a href="portal/signup.html" class="flex items-center">
+                                    <i class="fas fa-user-plus mr-2 text-blue-500"></i> Sign Up
+                                </a>
+                                <a href="portal/welcome.html" class="flex items-center">
+                                    <i class="fas fa-graduation-cap mr-2 text-purple-500"></i> Welcome
+                                </a>
+                                <a href="portal/login-secure.html" class="flex items-center">
+                                    <i class="fas fa-lock mr-2 text-red-500"></i> Secure Login
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <a href="#portfolio" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Portfolio</a>
+                        <a href="#contact" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150">Contact</a>
+                    </div>
+                    <!-- Mobile Menu Button -->
+                    <div class="flex items-center sm:hidden">
+                        <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="bg-white py-20 lg:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900">
-                Master the <span class="text-gradient">Digital Domain</span>
-            </h1>
-            <p class="mt-6 text-xl text-gray-500 max-w-3xl mx-auto">
-                Nexus is the future of digital education, offering expert-led mastery tracks in the most in-demand technological fields.
-            </p>
-            <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#tracks" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 transform hover:scale-105">
-                    Explore All Tracks
-                </a>
-                <a href="pages/about.html" class="inline-flex items-center justify-center px-8 py-3 border border-indigo-600 text-base font-medium rounded-lg text-indigo-600 bg-white hover:bg-indigo-50 transition duration-150">
-                    Learn Our Story
-                </a>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="sm:hidden hidden absolute w-full bg-white shadow-lg border-t border-gray-200">
+                <div class="pt-2 pb-3 space-y-1 px-2">
+                    <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-700 bg-indigo-50">Home</a>
+                    <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">About</a>
+                    
+                    <!-- Mobile Courses Section -->
+                    <div class="border-t border-gray-200 pt-2 mt-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Courses</p>
+                        <a href="courses/ai/index.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-brain mr-2 text-indigo-500"></i> AI & Machine Learning
+                        </a>
+                        <a href="courses/coding/index.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-code mr-2 text-blue-500"></i> Coding & Development
+                        </a>
+                        <a href="courses/design/index.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-palette mr-2 text-purple-500"></i> Design & Creative
+                        </a>
+                        <a href="courses/security/index.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-shield-alt mr-2 text-red-500"></i> Cyber Security
+                        </a>
+                    </div>
+                    
+                    <!-- Mobile Pages Section -->
+                    <div class="border-t border-gray-200 pt-2 mt-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Pages</p>
+                        <a href="pages/about.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-info-circle mr-2 text-gray-500"></i> About Us
+                        </a>
+                        <a href="pages/contact.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-envelope mr-2 text-gray-500"></i> Contact
+                        </a>
+                        <a href="pages/flow.html" class="block px-6 py-2 rounded-md text-base font-medium text-indigo-700 bg-indigo-50">
+                            <i class="fas fa-water mr-2 text-indigo-500"></i> Nexus Flow
+                        </a>
+                    </div>
+                    
+                    <!-- Mobile Portal Section -->
+                    <div class="border-t border-gray-200 pt-2 mt-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Portal</p>
+                        <a href="portal/login.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-sign-in-alt mr-2 text-green-500"></i> Student Login
+                        </a>
+                        <a href="portal/dashboard.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-tachometer-alt mr-2 text-orange-500"></i> Dashboard
+                        </a>
+                        <a href="portal/signup.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-user-plus mr-2 text-blue-500"></i> Sign Up
+                        </a>
+                        <a href="portal/welcome.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-graduation-cap mr-2 text-purple-500"></i> Welcome
+                        </a>
+                        <a href="portal/login-secure.html" class="block px-6 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">
+                            <i class="fas fa-lock mr-2 text-red-500"></i> Secure Login
+                        </a>
+                    </div>
+                    
+                    <a href="#portfolio" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">Portfolio</a>
+                    <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50">Contact</a>
+                </div>
             </div>
-        </div>
-    </header>
+        </nav>
 
-    <!-- Learning Tracks Section -->
-    <section id="tracks" class="py-20 lg:py-28 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-extrabold text-gray-900">Choose Your Mastery Path</h2>
-                <p class="mt-4 text-xl text-gray-500">Four intensive tracks designed for career acceleration in the digital world.</p>
+        <!-- Hero Section -->
+        <header id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <div class="wave"></div>
             </div>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="fade-in">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-6">
+                        <span class="text-reveal">
+                            <span style="animation-delay: 0.1s">M</span>
+                            <span style="animation-delay: 0.2s">a</span>
+                            <span style="animation-delay: 0.3s">s</span>
+                            <span style="animation-delay: 0.4s">t</span>
+                            <span style="animation-delay: 0.5s">e</span>
+                            <span style="animation-delay: 0.6s">r</span>
+                            <span style="animation-delay: 0.7s"> </span>
+                            <span style="animation-delay: 0.8s">t</span>
+                            <span style="animation-delay: 0.9s">h</span>
+                            <span style="animation-delay: 1.0s">e</span>
+                            <span style="animation-delay: 1.1s"> </span>
+                            <span class="text-gradient" style="animation-delay: 1.2s">Digital Domain</span>
+                        </span>
+                    </h1>
+                    <p class="mt-6 text-xl text-gray-500 max-w-3xl mx-auto">
+                        Nexus is the future of digital education, offering expert-led mastery tracks in the most in-demand technological fields.
+                    </p>
+                    <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#tracks" class="pulse inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 transform hover:scale-105">
+                            Explore All Tracks
+                        </a>
+                        <a href="#about" class="inline-flex items-center justify-center px-8 py-3 border border-indigo-600 text-base font-medium rounded-lg text-indigo-600 bg-white hover:bg-indigo-50 transition duration-150">
+                            Learn Our Story
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <i class="fas fa-chevron-down text-2xl text-indigo-600"></i>
+            </div>
+        </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-                <!-- Track 1: Digital Creation -->
-                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-indigo-500">
-                    <div class="text-5xl mb-4 text-indigo-500">🎨</div>
-                    <h3 class="text-xl font-bold text-gray-900">Digital Creation</h3>
-                    <p class="mt-2 text-gray-500 text-sm">Design, photography, video editing, and Adobe suite mastery.</p>
-                    <a href="courses/design/index.html" class="mt-4 inline-block text-indigo-600 font-semibold hover:text-indigo-800 transition duration-150">View Courses &rarr;</a>
+        <!-- Learning Tracks Section -->
+        <section id="tracks" class="py-20 lg:py-28 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-extrabold text-gray-900">Choose Your Mastery Path</h2>
+                    <p class="mt-4 text-xl text-gray-500">Four intensive tracks designed for career acceleration in the digital world.</p>
                 </div>
 
-                <!-- Track 2: Development & Code -->
-                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-blue-500">
-                    <div class="text-5xl mb-4 text-blue-500">💻</div>
-                    <h3 class="text-xl font-bold text-gray-900">Development & Code</h3>
-                    <p class="mt-2 text-gray-500 text-sm">Full-stack web development, Python programming, and data structures.</p>
-                    <a href="courses/coding/index.html" class="mt-4 inline-block text-blue-600 font-semibold hover:text-blue-800 transition duration-150">View Courses &rarr;</a>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Track 1: Digital Creation -->
+                    <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-indigo-500 hover-lift stagger-item">
+                        <div class="text-5xl mb-4 text-indigo-500">🎨</div>
+                        <h3 class="text-xl font-bold text-gray-900">Digital Creation</h3>
+                        <p class="mt-2 text-gray-500 text-sm">Design, photography, video editing, and Adobe suite mastery.</p>
+                        <a href="courses/design/index.html" class="mt-4 inline-block text-indigo-600 font-semibold hover:text-indigo-800 transition duration-150">View Courses &rarr;</a>
+                    </div>
 
-                <!-- Track 3: Cyber Security & IT -->
-                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-red-500">
-                    <div class="text-5xl mb-4 text-red-500">🔒</div>
-                    <h3 class="text-xl font-bold text-gray-900">Cyber Security & IT</h3>
-                    <p class="mt-2 text-gray-500 text-sm">Ethical hacking, network defense, and system administration.</p>
-                    <a href="courses/security/index.html" class="mt-4 inline-block text-red-600 font-semibold hover:text-red-800 transition duration-150">View Courses &rarr;</a>
-                </div>
+                    <!-- Track 2: Development & Code -->
+                    <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-blue-500 hover-lift stagger-item">
+                        <div class="text-5xl mb-4 text-blue-500">💻</div>
+                        <h3 class="text-xl font-bold text-gray-900">Development & Code</h3>
+                        <p class="mt-2 text-gray-500 text-sm">Full-stack web development, Python programming, and data structures.</p>
+                        <a href="courses/coding/index.html" class="mt-4 inline-block text-blue-600 font-semibold hover:text-blue-800 transition duration-150">View Courses &rarr;</a>
+                    </div>
 
-                <!-- Track 4: Future Tech & AI -->
-                <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-teal-500">
-                    <div class="text-5xl mb-4 text-teal-500">🧠</div>
-                    <h3 class="text-xl font-bold text-gray-900">Future Tech & AI</h3>
-                    <p class="mt-2 text-gray-500 text-sm">Machine learning, prompt engineering, and generative model creation.</p>
-                    <a href="courses/ai/index.html" class="mt-4 inline-block text-teal-600 font-semibold hover:text-teal-800 transition duration-150">View Courses &rarr;</a>
+                    <!-- Track 3: Cyber Security & IT -->
+                    <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-red-500 hover-lift stagger-item">
+                        <div class="text-5xl mb-4 text-red-500">🔒</div>
+                        <h3 class="text-xl font-bold text-gray-900">Cyber Security & IT</h3>
+                        <p class="mt-2 text-gray-500 text-sm">Ethical hacking, network defense, and system administration.</p>
+                        <a href="courses/security/index.html" class="mt-4 inline-block text-red-600 font-semibold hover:text-red-800 transition duration-150">View Courses &rarr;</a>
+                    </div>
+
+                    <!-- Track 4: Future Tech & AI -->
+                    <div class="bg-white rounded-xl shadow-xl p-6 text-center transition duration-300 hover:shadow-2xl hover:scale-[1.02] border-t-4 border-teal-500 hover-lift stagger-item">
+                        <div class="text-5xl mb-4 text-teal-500">🧠</div>
+                        <h3 class="text-xl font-bold text-gray-900">Future Tech & AI</h3>
+                        <p class="mt-2 text-gray-500 text-sm">Machine learning, prompt engineering, and generative model creation.</p>
+                        <a href="courses/ai/index.html" class="mt-4 inline-block text-teal-600 font-semibold hover:text-teal-800 transition duration-150">View Courses &rarr;</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Call to Action Section -->
-    <section class="bg-indigo-600 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-extrabold text-white">Ready to Start Your Journey?</h2>
-            <p class="mt-4 text-xl text-indigo-200">Join thousands of successful students building their digital careers.</p>
-            <a href="portal/login.html" class="mt-8 inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-lg shadow-2xl text-indigo-600 bg-white hover:bg-gray-100 transition duration-150 transform hover:scale-105">
-                Sign Up for Free
-            </a>
-        </div>
-    </section>
+        <!-- About Section -->
+        <section id="about" class="py-20 lg:py-28 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="fade-in">
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-6">About <span class="text-gradient nexus-font">Nexus</span></h2>
+                        <p class="text-lg text-gray-600 mb-6">
+                            Nexus represents the pinnacle of digital education, combining cutting-edge technology with expert-led instruction. Our approach focuses on practical skills that prepare students for real-world challenges in the digital landscape.
+                        </p>
+                        <p class="text-lg text-gray-600 mb-6">
+                            With a focus on career acceleration, we bring digital mastery to life through carefully crafted courses, hands-on projects, and industry connections that help our students succeed.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="pages/contact.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150">
+                                Get in Touch
+                            </a>
+                            <a href="pages/about.html" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
+                                Learn More About Nexus
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="morph-shape"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-gray-400 text-sm">
-                <a href="index.html" class="hover:text-white mx-2">Home</a>
-                <span class="mx-2">|</span>
-                <a href="pages/about.html" class="hover:text-white mx-2">About</a>
-                <span class="mx-2">|</span>
-                <a href="pages/contact.html" class="hover:text-white mx-2">Contact</a>
-                <span class="mx-2">|</span>
-                <a href="portal/login.html" class="hover:text-white mx-2">Student Portal</a>
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 lg:py-28 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-extrabold text-gray-900">Student Success Stories</h2>
+                    <p class="mt-4 text-xl text-gray-500">Showcasing the achievements of our graduates</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Portfolio Item 1 -->
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg hover-lift stagger-item">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <img src="https://picsum.photos/seed/success1/600/400.jpg" alt="Success Story 1" class="w-full h-64 object-cover">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6 text-white">
+                                <h3 class="text-xl font-bold mb-2">Sarah Johnson</h3>
+                                <p class="text-sm">From beginner to full-stack developer in 6 months</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 2 -->
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg hover-lift stagger-item">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <img src="https://picsum.photos/seed/success2/600/400.jpg" alt="Success Story 2" class="w-full h-64 object-cover">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6 text-white">
+                                <h3 class="text-xl font-bold mb-2">Michael Chen</h3>
+                                <p class="text-sm">Launched a successful AI startup after completing our ML track</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 3 -->
+                    <div class="group relative overflow-hidden rounded-xl shadow-lg hover-lift stagger-item">
+                        <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                            <img src="https://picsum.photos/seed/success3/600/400.jpg" alt="Success Story 3" class="w-full h-64 object-cover">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6 text-white">
+                                <h3 class="text-xl font-bold mb-2">Emily Rodriguez</h3>
+                                <p class="text-sm">Now leading cybersecurity at a Fortune 500 company</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-gray-700 text-center text-gray-500 text-sm">
-                &copy; 2025 Nexus Digital Mastery Academy. All rights reserved.
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="bg-indigo-600 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-extrabold text-white">Ready to Start Your Journey?</h2>
+                <p class="mt-4 text-xl text-indigo-200">Join thousands of successful students building their digital careers.</p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="portal/signup.html" class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-lg shadow-2xl text-indigo-600 bg-white hover:bg-gray-100 transition duration-150 transform hover:scale-105">
+                        Sign Up for Free
+                    </a>
+                    <a href="portal/login.html" class="inline-flex items-center justify-center px-10 py-3 border border-white text-base font-medium rounded-lg text-white bg-transparent hover:bg-indigo-700 transition duration-150 transform hover:scale-105">
+                        Login to Your Account
+                    </a>
+                </div>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <!-- Quick Access Section -->
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-extrabold text-gray-900">Quick Access</h2>
+                    <p class="mt-4 text-xl text-gray-500">Navigate to any page directly</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Portal Links -->
+                    <div class="bg-gray-50 rounded-xl p-6 text-center hover-lift">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Student Portal</h3>
+                        <div class="space-y-3">
+                            <a href="portal/login.html" class="block w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150">
+                                <i class="fas fa-sign-in-alt mr-2"></i> Login
+                            </a>
+                            <a href="portal/signup.html" class="block w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150">
+                                <i class="fas fa-user-plus mr-2"></i> Sign Up
+                            </a>
+                            <a href="portal/dashboard.html" class="block w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-150">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                            <a href="portal/welcome.html" class="block w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-150">
+                                <i class="fas fa-graduation-cap mr-2"></i> Welcome
+                            </a>
+                            <a href="portal/login-secure.html" class="block w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-150">
+                                <i class="fas fa-lock mr-2"></i> Secure Login
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Course Links -->
+                    <div class="bg-gray-50 rounded-xl p-6 text-center hover-lift">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Course Tracks</h3>
+                        <div class="space-y-3">
+                            <a href="courses/ai/index.html" class="block w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150">
+                                <i class="fas fa-brain mr-2"></i> AI & Machine Learning
+                            </a>
+                            <a href="courses/coding/index.html" class="block w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150">
+                                <i class="fas fa-code mr-2"></i> Coding & Development
+                            </a>
+                            <a href="courses/design/index.html" class="block w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-150">
+                                <i class="fas fa-palette mr-2"></i> Design & Creative
+                            </a>
+                            <a href="courses/security/index.html" class="block w-full py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-150">
+                                <i class="fas fa-shield-alt mr-2"></i> Cyber Security
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Page Links -->
+                    <div class="bg-gray-50 rounded-xl p-6 text-center hover-lift">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Information Pages</h3>
+                        <div class="space-y-3">
+                            <a href="pages/about.html" class="block w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150">
+                                <i class="fas fa-info-circle mr-2"></i> About Us
+                            </a>
+                            <a href="pages/contact.html" class="block w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150">
+                                <i class="fas fa-envelope mr-2"></i> Contact
+                            </a>
+                            <a href="pages/flow.html" class="block w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-150">
+                                <i class="fas fa-water mr-2"></i> Nexus Flow
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Other Links -->
+                    <div class="bg-gray-50 rounded-xl p-6 text-center hover-lift">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Other Resources</h3>
+                        <div class="space-y-3">
+                            <a href="#portfolio" class="block w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150">
+                                <i class="fas fa-images mr-2"></i> Student Portfolio
+                            </a>
+                            <a href="#tracks" class="block w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150">
+                                <i class="fas fa-road mr-2"></i> Learning Tracks
+                            </a>
+                            <a href="#about" class="block w-full py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-150">
+                                <i class="fas fa-question-circle mr-2"></i> About Nexus
+                            </a>
+                            <a href="#contact" class="block w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-150">
+                                <i class="fas fa-phone mr-2"></i> Contact Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <!-- Nexus Brand -->
+                    <div class="text-center md:text-left">
+                        <a href="index.html" class="text-2xl font-extrabold text-white nexus-font">NEXUS</a>
+                        <p class="mt-4 text-gray-400">Digital Mastery Academy</p>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                            <li><a href="pages/about.html" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                            <li><a href="pages/flow.html" class="text-gray-400 hover:text-white transition-colors">Nexus Flow</a></li>
+                            <li><a href="pages/contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Courses -->
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Courses</h4>
+                        <ul class="space-y-2">
+                            <li><a href="courses/ai/index.html" class="text-gray-400 hover:text-white transition-colors">AI & ML</a></li>
+                            <li><a href="courses/coding/index.html" class="text-gray-400 hover:text-white transition-colors">Coding</a></li>
+                            <li><a href="courses/design/index.html" class="text-gray-400 hover:text-white transition-colors">Design</a></li>
+                            <li><a href="courses/security/index.html" class="text-gray-400 hover:text-white transition-colors">Security</a></li>
+                        </ul>
+                    </div>
+                    <!-- FROM -->
+                     <div>
+                    <li><a href="pages/contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </div>
+                    <!-- TO -->
+                    <div>
+                    <li><a href="/Nexus/pages/contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </div>
+                    <!-- Portal -->
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Student Portal</h4>
+                        <ul class="space-y-2">
+                            <li><a href="portal/login.html" class="text-gray-400 hover:text-white transition-colors">Login</a></li>
+                            <li><a href="portal/signup.html" class="text-gray-400 hover:text-white transition-colors">Sign Up</a></li>
+                            <li><a href="portal/dashboard.html" class="text-gray-400 hover:text-white transition-colors">Dashboard</a></li>
+                            <li><a href="portal/welcome.html" class="text-gray-400 hover:text-white transition-colors">Welcome</a></li>
+                        </ul>
+                    </div>
+                    <!-- Pages Dropdown -->
+<div class="dropdown">
+    <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md font-medium transition duration-150 flex items-center">
+        Pages <i class="fas fa-chevron-down ml-1 text-xs"></i>
+    </a>
+    <div class="dropdown-content">
+        <a href="pages/about.html" class="flex items-center">
+            <i class="fas fa-info-circle mr-2 text-gray-500"></i> About Us
+        </a>
+        <!-- ADD THIS NEW LINK -->
+        <a href="/Nexus/pages/team.html" class="flex items-center">
+            <i class="fas fa-users mr-2 text-indigo-500"></i> Our Team
+        </a>
+        <a href="/Nexus/pages/contact.html" class="flex items-center">
+            <i class="fas fa-envelope mr-2 text-gray-500"></i> Contact
+        </a>
+        <a href="pages/flow.html" class="flex items-center">
+            <i class="fas fa-water mr-2 text-indigo-500"></i> Nexus Flow
+        </a>
+    </div>
+</div>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+                    <p>&copy; 2025 Nexus Digital Mastery Academy. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div> <!-- End of main-content -->
 
     <script>
+        // Wait for DOM to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get references to intro container and main content
+            const introContainer = document.getElementById('intro-container');
+            const mainContent = document.getElementById('main-content');
+            
+            // Get all SVG paths for the letters
+            const nPath = document.getElementById('n-path');
+            const ePath = document.getElementById('e-path');
+            const xPath = document.getElementById('x-path');
+            const uPath = document.getElementById('u-path');
+            const sPath = document.getElementById('s-path');
+            
+            // Animation timing variables
+            const letterDelay = 300; // Delay between each letter animation
+            const totalAnimationTime = 2000; // Total time for the handwriting animation
+            const fadeOutDelay = 1000; // Delay before starting the fade out
+            
+            // Function to animate a path
+            function animatePath(path, delay) {
+                setTimeout(() => {
+                    path.style.transition = 'stroke-dashoffset 1s ease-in-out';
+                    path.style.strokeDashoffset = '0';
+                }, delay);
+            }
+            
+            // Start the animation for each letter with delays
+            animatePath(nPath, 0);
+            animatePath(ePath, letterDelay);
+            animatePath(xPath, letterDelay * 2);
+            animatePath(uPath, letterDelay * 3);
+            animatePath(sPath, letterDelay * 4);
+            
+            // After the animation is complete, fade out the intro and fade in the main content
+            setTimeout(() => {
+                // Fade out the intro container
+                introContainer.style.opacity = '0';
+                
+                // After the fade out transition, hide the intro container completely
+                setTimeout(() => {
+                    introContainer.style.display = 'none';
+                    
+                    // Fade in the main content
+                    mainContent.style.opacity = '1';
+                }, 1500); // Match this to the transition duration in CSS
+            }, totalAnimationTime + fadeOutDelay);
+        });
+        
         // JavaScript for mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white', 'shadow-lg');
+                navbar.classList.remove('bg-white/90');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-lg');
+                navbar.classList.add('bg-white/90');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Stagger animation for items within a section
+                    if (entry.target.classList.contains('fade-in')) {
+                        const staggerItems = entry.target.querySelectorAll('.stagger-item');
+                        staggerItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, index * 100);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in, .stagger-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.wave');
+            if (parallax) {
+                const speed = 0.5;
+                parallax.style.transform = `translateY(${scrolled * speed}px)`;
+            }
+        });
+
+        // Add hover effect to navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                document.querySelectorAll('.nav-link').forEach(otherLink => {
+                    if (otherLink !== this) {
+                        otherLink.classList.add('text-gray-400');
+                        otherLink.classList.remove('text-gray-500', 'text-indigo-600', 'border-b-2', 'border-indigo-600');
+                    }
+                });
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                document.querySelectorAll('.nav-link').forEach(otherLink => {
+                    otherLink.classList.remove('text-gray-400');
+                    otherLink.classList.add('text-gray-500');
+                    otherLink.classList.remove('text-indigo-600', 'border-b-2', 'border-indigo-600');
+                });
+                
+                // Keep active link highlighted
+                const currentSection = window.location.hash || '#home';
+                const activeLink = document.querySelector(`.nav-link[href="${currentSection}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('text-indigo-600', 'border-b-2', 'border-indigo-600');
+                    activeLink.classList.remove('text-gray-500');
+                }
+            });
+        });
+
+        // Initialize animations on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Trigger initial animations
+            setTimeout(() => {
+                document.querySelector('.fade-in').classList.add('visible');
+            }, 300);
         });
     </script>
 </body>
